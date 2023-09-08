@@ -9,7 +9,8 @@ const tabBtn = document.getElementById("tab-btn");
 const leadsFromLocalSt = JSON.parse(localStorage.getItem("myLeads"));
 
 if(leadsFromLocalSt){
-    render(leadsFromLocalSt);
+    myLeads = leadsFromLocalSt
+    render(myLeads);
 }
 
 tabBtn.addEventListener('click', function() {
@@ -28,7 +29,6 @@ inputBtn.addEventListener("click", function() {
 
     localStorage.setItem("myLeads", JSON.stringify(myLeads))
     render(myLeads);
-    console.log( localStorage.getItem("myLeads") )
 })
 
 deleteBtn.addEventListener('dblclick', function() {
