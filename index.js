@@ -4,35 +4,47 @@ const inputEl = document.getElementById("input-el");
 const inputBtn = document.getElementById("input-btn");
 const ulEl = document.getElementById("ul-el");
 const deleteBtn = document.getElementById("delete-btn");
+const tabBtn = document.getElementById("tab-btn");
 
-myLeads = JSON.parse(localStorage.getItem("myLeads"));
+const leadsFromLocalSt = JSON.parse(localStorage.getItem("myLeads"));
 
-if(myLeads){
-    renderLeads();
+if(leadsFromLocalSt){
+    render(leadsFromLocalSt);
 }
+
+tabBtn.addEventListener('click', function() {
+    chrome.tabs.query({active: true, currentWindow:true}, function(tabs) {
+        let activeTab = tabs[0];
+        myLeads.push(activeTab.url)
+        localStorage.setItem("myLeads", JSON.stringify(myLeads));
+        render(myLeads)
+    })
+
+})
+
 inputBtn.addEventListener("click", function() {
     myLeads.push(inputEl.value)
     inputEl.value= ""
 
     localStorage.setItem("myLeads", JSON.stringify(myLeads))
-    renderLeads();
+    render(myLeads);
     console.log( localStorage.getItem("myLeads") )
 })
 
 deleteBtn.addEventListener('dblclick', function() {
     localStorage.clear();
     myLeads = [];
-    ulEl.innerHTML = ""; //or renderLeads()
+    render(myLeads)
 })
 
-function renderLeads() {
+function render(leads) {
 
     let listItems = ""
 
-    for(let i=0; i < myLeads.length; i ++) {
+    for(let i=0; i < leads.length; i ++) {
         listItems += `<li>
-                        <a target='_blank' href='${myLeads[i]}'> 
-                        ${myLeads[i]} 
+                        <a target='_blank' href='${leads[i]}'> 
+                        ${leads[i]} 
                         </a>
                     </li>`
     }
